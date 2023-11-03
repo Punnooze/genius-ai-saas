@@ -52,6 +52,7 @@ function ConversationPage() {
       // Open Pro MODAl
       console.log('mf', error);
     } finally {
+      router.refresh();
     }
   };
 

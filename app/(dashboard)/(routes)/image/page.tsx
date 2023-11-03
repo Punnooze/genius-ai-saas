@@ -53,6 +53,7 @@ function ImagesPage() {
       form.reset();
     } catch (error: any) {
     } finally {
+      router.refresh();
     }
   };
 
