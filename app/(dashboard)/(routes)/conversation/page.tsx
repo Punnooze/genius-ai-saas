@@ -21,9 +21,11 @@ import Loader from '@/components/Loader';
 import { cn } from '@/lib/utils';
 import UserAvatar from '@/components/UserAvatar';
 import BotAvatar from '@/components/BotAvatar';
+import { useProModal } from '@/hooks/use-pro-modal';
 
 function ConversationPage() {
   const router = useRouter();
+  const proModal = useProModal();
   const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,8 +51,9 @@ function ConversationPage() {
 
       form.reset();
     } catch (error: any) {
-      // Open Pro MODAl
-      console.log('mf', error);
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else console.log(error);
     } finally {
       router.refresh();
     }

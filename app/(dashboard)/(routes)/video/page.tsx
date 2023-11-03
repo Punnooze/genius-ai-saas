@@ -21,9 +21,11 @@ import Loader from '@/components/Loader';
 import { cn } from '@/lib/utils';
 import UserAvatar from '@/components/UserAvatar';
 import BotAvatar from '@/components/BotAvatar';
+import { useProModal } from '@/hooks/use-pro-modal';
 
 function VideoPage() {
   const router = useRouter();
+  const proModal = useProModal();
   const [video, setVideo] = useState<string>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,7 +42,9 @@ function VideoPage() {
       setVideo(response.data[0]);
       form.reset();
     } catch (error: any) {
-      // Open Pro MODAl
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else console.log(error);
       console.log('mf', error);
     } finally {
       router.refresh();
